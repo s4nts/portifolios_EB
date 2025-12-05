@@ -23,6 +23,7 @@ export default function Home() {
                 key={article.slug}
                 title={article.title}
                 slug={article.slug}
+                studentName={article.studentName}
               />
             ))}
           </div>

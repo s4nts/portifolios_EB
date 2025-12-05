@@ -19,11 +19,11 @@ export default function ArticleSection({
   image,
 }: ArticleSectionProps) {
   const [imagePath, setImagePath] = useState<string>("/images/logo.png");
-  
+
   // Validação básica das props
   const safeHeading = useMemo(() => heading?.trim() || "", [heading]);
   const safeBody = useMemo(() => body?.trim() || "", [body]);
-  
+
   useEffect(() => {
     // Aplica basePath após montagem do componente (no cliente)
     const baseImage = image?.trim() || "/images/logo.png";

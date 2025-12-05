@@ -10,6 +10,7 @@ export interface ArticleSection {
 export interface Article {
   title: string;
   slug: string;
+  studentName: string;
   sections: ArticleSection[];
 }
 
@@ -28,6 +29,7 @@ function isValidArticle(data: unknown): data is Article {
   if (
     typeof article.title !== 'string' ||
     typeof article.slug !== 'string' ||
+    typeof article.studentName !== 'string' ||
     !Array.isArray(article.sections)
   ) {
     return false;
