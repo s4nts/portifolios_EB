@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { withBasePath } from "@/lib/getBasePath";
 
 interface ArticleSectionProps {
   heading: string;
@@ -17,14 +18,16 @@ export default function ArticleSection({
   body,
   image,
 }: ArticleSectionProps) {
+  const [imagePath, setImagePath] = useState<string>("/images/logo.png");
+  
   // Validação básica das props
   const safeHeading = useMemo(() => heading?.trim() || "", [heading]);
   const safeBody = useMemo(() => body?.trim() || "", [body]);
-  const safeImage = useMemo(() => {
-    if (!image || typeof image !== "string") {
-      return "/images/logo.png"; // Fallback para imagem padrão
-    }
-    return image;
+  
+  useEffect(() => {
+    // Aplica basePath após montagem do componente (no cliente)
+    const baseImage = image?.trim() || "/images/logo.png";
+    setImagePath(withBasePath(baseImage));
   }, [image]);
 
   if (!safeHeading && !safeBody) {
@@ -52,7 +55,7 @@ export default function ArticleSection({
       <div className="flex justify-center">
         <div className="relative w-full md:w-[320px] h-[200px] md:h-[200px]">
           <Image
-            src={safeImage}
+            src={imagePath}
             alt={safeHeading || "Imagem da seção"}
             fill
             className="object-cover rounded-lg"
