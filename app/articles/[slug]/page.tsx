@@ -1,8 +1,8 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import ArticleLayout from '@/components/ArticleLayout';
-import ArticleSection from '@/components/ArticleSection';
-import { getArticleBySlug, getAllSlugs } from '@/lib/contentLoader';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import ArticleLayout from "@/components/ArticleLayout";
+import ArticleSection from "@/components/ArticleSection";
+import { getArticleBySlug, getAllSlugs } from "@/lib/contentLoader";
 
 interface ArticlePageProps {
   params: Promise<{
@@ -21,8 +21,8 @@ export async function generateMetadata({
 
   if (!article) {
     return {
-      title: 'Artigo não encontrado',
-      description: 'O artigo solicitado não foi encontrado.',
+      title: "Artigo não encontrado",
+      description: "O artigo solicitado não foi encontrado.",
     };
   }
 
@@ -35,7 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title: article.title,
       description,
-      type: 'article',
+      type: "article",
     },
   };
 }
@@ -62,7 +62,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <ArticleLayout 
+    <ArticleLayout
       title={article.title}
       studentName={article.studentName}
       slug={article.slug}
