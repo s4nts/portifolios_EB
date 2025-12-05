@@ -88,16 +88,19 @@ export default function ArticleSection({
 
       {/* Galeria de imagens */}
       {imagePaths.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className={`flex ${imagePaths.length > 1 ? 'flex-row flex-wrap' : 'justify-center'} gap-6`}>
           {imagePaths.map((imagePath, index) => (
-            <div key={index} className="relative group w-full md:w-auto">
-              <div className="relative w-full md:w-[600px] h-[450px] overflow-hidden">
+            <div 
+              key={index} 
+              className={`relative group ${imagePaths.length > 1 ? 'flex-1 min-w-[300px]' : 'w-full md:w-auto'}`}
+            >
+              <div className={`relative w-full ${imagePaths.length > 1 ? 'h-[450px]' : 'md:w-[600px] h-[450px]'} overflow-hidden`}>
                 <Image
                   src={imagePath}
                   alt={`${safeHeading || "Imagem da seção"} - ${index + 1}`}
                   fill
                   className="object-contain bg-slate-50"
-                  sizes="(max-width: 768px) 100vw, 600px"
+                  sizes={imagePaths.length > 1 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 600px"}
                   loading="lazy"
                 />
 
