@@ -9,6 +9,7 @@ interface ArticleSectionProps {
   heading: string;
   body: string;
   image: string | string[];
+  isLast?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ export default function ArticleSection({
   heading,
   body,
   image,
+  isLast = false,
 }: ArticleSectionProps) {
   // Normaliza para array
   const images = useMemo(() => {
@@ -61,81 +63,89 @@ export default function ArticleSection({
   }
 
   return (
-    <section
-      className="mb-12"
-      aria-labelledby={`section-${safeHeading.slice(0, 10)}`}
-    >
-      {safeHeading && (
-        <h2
-          id={`section-${safeHeading.slice(0, 10)}`}
-          className="text-2xl font-semibold text-slate-800 mb-4"
-        >
-          {safeHeading}
-        </h2>
-      )}
-      {safeBody && (
-        <p className="text-base text-slate-700 leading-relaxed mb-6">
-          {safeBody.startsWith("OBJETIVO:") ? (
-            <>
-              <span className="font-bold">OBJETIVO:</span>
-              {safeBody.substring(9)}
-            </>
-          ) : (
-            safeBody
-          )}
-        </p>
-      )}
+    <>
+      <section
+        className="mb-12"
+        aria-labelledby={`section-${safeHeading.slice(0, 10)}`}
+      >
+        {/* 1. Título */}
+        {safeHeading && (
+          <h2
+            id={`section-${safeHeading.slice(0, 10)}`}
+            className="text-2xl font-semibold text-slate-800 mb-6"
+          >
+            {safeHeading}
+          </h2>
+        )}
 
-      {/* Galeria de imagens */}
-      {imagePaths.length > 0 && (
-        <div
-          className={`flex ${
-            imagePaths.length > 1 ? "flex-row flex-wrap" : "justify-center"
-          } gap-6`}
-        >
-          {imagePaths.map((imagePath, index) => (
-            <div
-              key={index}
-              className={`relative group w-full ${
-                imagePaths.length > 1
-                  ? "md:flex-1 md:min-w-[300px]"
-                  : "md:w-auto"
-              }`}
-            >
+        {/* 2. Galeria de imagens */}
+        {imagePaths.length > 0 && (
+          <div
+            className={`flex ${
+              imagePaths.length > 1 ? "flex-row flex-wrap" : "justify-center"
+            } gap-6 mb-6`}
+          >
+            {imagePaths.map((imagePath, index) => (
               <div
-                className={`relative w-full ${
-                  imagePaths.length > 1 ? "h-[450px]" : "md:w-[600px] h-[450px]"
-                } overflow-hidden`}
+                key={index}
+                className={`relative group w-full ${
+                  imagePaths.length > 1
+                    ? "md:flex-1 md:min-w-[300px]"
+                    : "md:w-auto"
+                }`}
               >
-                <Image
-                  src={imagePath}
-                  alt={`${safeHeading || "Imagem da seção"} - ${index + 1}`}
-                  fill
-                  className="object-contain bg-slate-50"
-                  sizes={
-                    imagePaths.length > 1
-                      ? "(max-width: 768px) 100vw, 50vw"
-                      : "(max-width: 768px) 100vw, 600px"
-                  }
-                  loading="lazy"
-                />
-
-                {/* Botão de download */}
-                <button
-                  onClick={() =>
-                    handleDownload(imagePath, `${safeHeading}-${index + 1}`)
-                  }
-                  className="absolute top-3 right-3 bg-white/80 hover:bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  aria-label={`Baixar imagem ${index + 1}`}
-                  type="button"
+                <div
+                  className={`relative w-full ${
+                    imagePaths.length > 1 ? "h-[450px]" : "md:w-[600px] h-[450px]"
+                  } overflow-hidden`}
                 >
-                  <Download className="w-5 h-5 text-slate-700" />
-                </button>
+                  <Image
+                    src={imagePath}
+                    alt={`${safeHeading || "Imagem da seção"} - ${index + 1}`}
+                    fill
+                    className="object-contain bg-slate-50"
+                    sizes={
+                      imagePaths.length > 1
+                        ? "(max-width: 768px) 100vw, 50vw"
+                        : "(max-width: 768px) 100vw, 600px"
+                    }
+                    loading="lazy"
+                  />
+
+                  {/* Botão de download */}
+                  <button
+                    onClick={() =>
+                      handleDownload(imagePath, `${safeHeading}-${index + 1}`)
+                    }
+                    className="absolute top-3 right-3 bg-white/80 hover:bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    aria-label={`Baixar imagem ${index + 1}`}
+                    type="button"
+                  >
+                    <Download className="w-5 h-5 text-slate-700" />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
+            ))}
+          </div>
+        )}
+
+        {/* 3. Objetivo */}
+        {safeBody && (
+          <p className="text-base text-slate-700 leading-relaxed">
+            {safeBody.startsWith("OBJETIVO:") ? (
+              <>
+                <span className="font-bold">OBJETIVO:</span>
+                {safeBody.substring(9)}
+              </>
+            ) : (
+              safeBody
+            )}
+          </p>
+        )}
+      </section>
+
+      {/* Separador entre seções (não exibe na última) */}
+      {!isLast && <div className="border-t border-slate-200 my-8"></div>}
+    </>
   );
 }

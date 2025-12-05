@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticleLayout from "@/components/ArticleLayout";
-import ArticleSection from "@/components/ArticleSection";
+import ArticleContent from "@/components/ArticleContent";
 import { getArticleBySlug, getAllSlugs } from "@/lib/contentLoader";
 
 interface ArticlePageProps {
@@ -67,14 +67,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       studentName={article.studentName}
       slug={article.slug}
     >
-      {article.sections.map((section, index) => (
-        <ArticleSection
-          key={`${article.slug}-section-${index}`}
-          heading={section.heading}
-          body={section.body}
-          image={section.image}
-        />
-      ))}
+      <ArticleContent sections={article.sections} slug={article.slug} />
     </ArticleLayout>
   );
 }
