@@ -61,6 +61,16 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
+      - name: Set basePath for GitHub Pages
+        run: |
+          # Define BASE_PATH baseado no nome do repositório para GitHub Pages
+          # Para repositórios de projeto: /repository-name
+          # Para repositórios de usuário/organização: (vazio, servido na raiz)
+          REPO_NAME="${{ github.event.repository.name }}"
+          if [[ "$REPO_NAME" != *".github.io" ]]; then
+            echo "BASE_PATH=/$REPO_NAME" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_BASE_PATH=/$REPO_NAME" >> $GITHUB_ENV
+          fi
       - name: Restore cache
         uses: actions/cache@v4
         with:
