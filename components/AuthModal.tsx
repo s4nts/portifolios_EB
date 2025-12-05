@@ -2,7 +2,7 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, X } from "lucide-react";
+import { Lock, X, MessageCircle } from "lucide-react";
 import { isValidPassword, setAuthenticated } from "@/lib/auth";
 
 interface AuthModalProps {
@@ -127,6 +127,21 @@ export default function AuthModal({
               {isLoading ? "Verificando..." : "Desbloquear"}
             </button>
           </form>
+
+          <div className="mt-4 pt-4 border-t border-slate-200">
+            <a
+              href="https://wa.me/5547997302855"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Esqueci a senha</span>
+            </a>
+            <p className="mt-2 text-xs text-slate-500 text-center">
+              Entre em contato com a professora responsável
+            </p>
+          </div>
 
           <p className="mt-4 text-xs text-slate-500 text-center">
             Portifólio de {studentName}
