@@ -7,7 +7,9 @@ import { getAllArticles } from '@/lib/contentLoader';
  * Página inicial que lista todos os artigos disponíveis
  */
 export default function Home() {
-  const articles = getAllArticles();
+  const articles = getAllArticles().sort((a, b) => 
+    a.studentName.localeCompare(b.studentName, 'pt-BR', { sensitivity: 'base' })
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">

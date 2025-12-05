@@ -49,7 +49,14 @@ export default function ArticleSection({
       )}
       {safeBody && (
         <p className="text-base text-slate-700 leading-relaxed mb-6">
-          {safeBody}
+          {safeBody.startsWith('OBJETIVO:') ? (
+            <>
+              <span className="font-bold">OBJETIVO:</span>
+              {safeBody.substring(9)}
+            </>
+          ) : (
+            safeBody
+          )}
         </p>
       )}
       <div className="flex justify-center">
