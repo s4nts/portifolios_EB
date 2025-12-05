@@ -4,7 +4,7 @@ import path from 'path';
 export interface ArticleSection {
   heading: string;
   body: string;
-  image: string;
+  image: string | string[]; // Suporta uma imagem ou múltiplas imagens
 }
 
 export interface Article {
@@ -36,12 +36,20 @@ function isValidArticle(data: unknown): data is Article {
   }
 
   return article.sections.every(
-    (section): section is ArticleSection =>
-      typeof section === 'object' &&
-      section !== null &&
-      typeof (section as ArticleSection).heading === 'string' &&
-      typeof (section as ArticleSection).body === 'string' &&
-      typeof (section as ArticleSection).image === 'string'
+    (section): section is ArticleSection => {
+      if (typeof section !== 'object' || section === null) {
+        return false;
+      }
+      const sec = section as ArticleSection;
+      const hasValidImage = 
+        typeof sec.image === 'string' || 
+        (Array.isArray(sec.image) && sec.image.every(img => typeof img === 'string'));
+      return (
+        typeof sec.heading === 'string' &&
+        typeof sec.body === 'string' &&
+        hasValidImage
+      );
+    }
   );
 }
 

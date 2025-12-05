@@ -2,23 +2,29 @@
 
 import Image from "next/image";
 import { useMemo, useState, useEffect } from "react";
+import { Download } from "lucide-react";
 import { withBasePath } from "@/lib/getBasePath";
 
 interface ArticleSectionProps {
   heading: string;
   body: string;
-  image: string;
+  image: string | string[];
 }
 
 /**
- * Componente que exibe uma seção de artigo com título, corpo e imagem
+ * Componente que exibe uma seção de artigo com título, corpo e imagem(s)
  */
 export default function ArticleSection({
   heading,
   body,
   image,
 }: ArticleSectionProps) {
-  const [imagePath, setImagePath] = useState<string>("/images/logo.png");
+  // Normaliza para array
+  const images = useMemo(() => {
+    return Array.isArray(image) ? image : [image];
+  }, [image]);
+
+  const [imagePaths, setImagePaths] = useState<string[]>([]);
 
   // Validação básica das props
   const safeHeading = useMemo(() => heading?.trim() || "", [heading]);
@@ -26,9 +32,29 @@ export default function ArticleSection({
 
   useEffect(() => {
     // Aplica basePath após montagem do componente (no cliente)
-    const baseImage = image?.trim() || "/images/logo.png";
-    setImagePath(withBasePath(baseImage));
-  }, [image]);
+    const paths = images.map((img) => {
+      const baseImage = img?.trim() || "/images/logo.png";
+      return withBasePath(baseImage);
+    });
+    setImagePaths(paths);
+  }, [images]);
+
+  const handleDownload = async (imagePath: string, alt: string) => {
+    try {
+      const response = await fetch(imagePath);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${alt || "imagem"}.${blob.type.split("/")[1] || "jpg"}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erro ao fazer download da imagem:", error);
+    }
+  };
 
   if (!safeHeading && !safeBody) {
     return null;
@@ -59,18 +85,39 @@ export default function ArticleSection({
           )}
         </p>
       )}
-      <div className="flex justify-center">
-        <div className="relative w-full md:w-[320px] h-[200px] md:h-[200px]">
-          <Image
-            src={imagePath}
-            alt={safeHeading || "Imagem da seção"}
-            fill
-            className="object-cover rounded-lg"
-            sizes="(max-width: 768px) 100vw, 320px"
-            loading="lazy"
-          />
+      
+      {/* Galeria de imagens */}
+      {imagePaths.length > 0 && (
+        <div className="flex flex-wrap justify-center gap-4">
+          {imagePaths.map((imagePath, index) => (
+            <div
+              key={index}
+              className="relative group w-full md:w-auto"
+            >
+              <div className="relative w-full md:w-[400px] h-[300px] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <Image
+                  src={imagePath}
+                  alt={`${safeHeading || "Imagem da seção"} - ${index + 1}`}
+                  fill
+                  className="object-contain bg-slate-50"
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  loading="lazy"
+                />
+                
+                {/* Botão de download */}
+                <button
+                  onClick={() => handleDownload(imagePath, `${safeHeading}-${index + 1}`)}
+                  className="absolute top-3 right-3 bg-white/80 hover:bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  aria-label={`Baixar imagem ${index + 1}`}
+                  type="button"
+                >
+                  <Download className="w-5 h-5 text-slate-700" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
     </section>
   );
 }
