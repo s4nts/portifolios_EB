@@ -42,13 +42,13 @@ export default function ArticleSection({
       {safeHeading && (
         <h2
           id={`section-${safeHeading.slice(0, 10)}`}
-          className="text-2xl font-semibold text-gray-900 mb-4"
+          className="text-2xl font-semibold text-slate-800 mb-4"
         >
           {safeHeading}
         </h2>
       )}
       {safeBody && (
-        <p className="text-base text-gray-700 leading-relaxed mb-6">
+        <p className="text-base text-slate-700 leading-relaxed mb-6">
           {safeBody}
         </p>
       )}

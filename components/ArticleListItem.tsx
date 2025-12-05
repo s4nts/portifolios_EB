@@ -16,7 +16,7 @@ export default function ArticleListItem({
   studentName,
   subtitle,
 }: ArticleListItemProps) {
-  const safeTitle = title?.trim() || "Artigo sem título";
+  const safeTitle = title?.trim() || "Portifólio";
   const safeSlug = slug?.trim() || "";
   const safeStudentName = studentName?.trim() || "";
   const safeSubtitle = subtitle?.trim();
@@ -32,15 +32,35 @@ export default function ArticleListItem({
     <article role="listitem">
       <Link
         href={`/articles/${safeSlug}`}
-        className="block p-6 bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+        className="group block p-6 bg-white border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
         aria-label={`Ver portifólio: ${displayTitle}`}
       >
-        <h2 className="text-xl font-semibold text-gray-900 mb-1">
-          {displayTitle}
-        </h2>
-        {safeSubtitle && (
-          <p className="text-sm text-gray-600">{safeSubtitle}</p>
-        )}
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors">
+              {displayTitle}
+            </h2>
+            {safeSubtitle && (
+              <p className="text-sm text-slate-500">{safeSubtitle}</p>
+            )}
+          </div>
+          <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg
+              className="w-5 h-5 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </div>
       </Link>
     </article>
   );

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { withBasePath } from "@/lib/getBasePath";
 
 /**
- * Componente de cabeçalho com logo centralizada
+ * Componente de cabeçalho com logo e título
  */
 export default function Header() {
   const [logoPath, setLogoPath] = useState<string>("/images/logo.png");
@@ -16,14 +16,14 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="w-full bg-white border-b border-gray-200" role="banner">
-      <div className="max-w-5xl mx-auto py-8 px-4">
+    <header className="w-full bg-white border-b border-slate-200 shadow-sm" role="banner">
+      <div className="max-w-5xl mx-auto py-6 px-4">
         <Link
           href="/"
-          className="flex justify-center"
+          className="flex flex-col items-center gap-3 hover:opacity-80 transition-opacity"
           aria-label="Ir para página inicial"
         >
-          <div className="relative w-20 h-20">
+          <div className="relative w-16 h-16">
             <Image
               src={logoPath}
               alt="Logo do site"
@@ -31,6 +31,14 @@ export default function Header() {
               className="object-contain"
               priority
             />
+          </div>
+          <div className="text-center">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-800">
+              Portifólios Educacionais
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Maternal II - 2025
+            </p>
           </div>
         </Link>
       </div>

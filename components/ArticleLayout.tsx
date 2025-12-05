@@ -22,15 +22,15 @@ export default function ArticleLayout({
     : safeTitle;
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="w-full bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <header className="w-full bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-4xl mx-auto py-4 px-4">
           <div className="flex items-center justify-between mb-4">
             <BackButton />
             <LogoImage />
           </div>
           <div className="text-center">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-800">
               {displayTitle}
             </h1>
           </div>

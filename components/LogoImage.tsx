@@ -15,7 +15,7 @@ export default function LogoImage() {
   }, []);
 
   return (
-    <div className="relative w-12 h-12">
+    <div className="relative w-16 h-16">
       <Image
         src={logoPath}
         alt="Logo do site"
