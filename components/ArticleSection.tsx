@@ -85,15 +85,12 @@ export default function ArticleSection({
           )}
         </p>
       )}
-      
+
       {/* Galeria de imagens */}
       {imagePaths.length > 0 && (
         <div className="flex flex-wrap justify-center gap-4">
           {imagePaths.map((imagePath, index) => (
-            <div
-              key={index}
-              className="relative group w-full md:w-auto"
-            >
+            <div key={index} className="relative group w-full md:w-auto">
               <div className="relative w-full md:w-[400px] h-[300px] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <Image
                   src={imagePath}
@@ -103,10 +100,12 @@ export default function ArticleSection({
                   sizes="(max-width: 768px) 100vw, 400px"
                   loading="lazy"
                 />
-                
+
                 {/* Botão de download */}
                 <button
-                  onClick={() => handleDownload(imagePath, `${safeHeading}-${index + 1}`)}
+                  onClick={() =>
+                    handleDownload(imagePath, `${safeHeading}-${index + 1}`)
+                  }
                   className="absolute top-3 right-3 bg-white/80 hover:bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label={`Baixar imagem ${index + 1}`}
                   type="button"
