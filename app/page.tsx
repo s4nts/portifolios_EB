@@ -10,9 +10,9 @@ export default function Home() {
   const articles = getAllArticles();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       <Header />
-      <main className="max-w-5xl mx-auto px-4 py-12">
+      <main className="max-w-5xl mx-auto px-4 py-12 flex-1">
         {articles.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-slate-600">Nenhum portifólio disponível no momento.</p>
