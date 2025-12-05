@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Lock, X } from "lucide-react";
 import { isValidPassword, setAuthenticated } from "@/lib/auth";
 
 interface AuthModalProps {
@@ -20,9 +21,14 @@ export default function AuthModal({
   slug,
   onSuccess,
 }: AuthModalProps) {
+  const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleClose = () => {
+    router.push("/");
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +67,17 @@ export default function AuthModal({
       <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4">
         {/* Modal */}
         <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-200">
-          {/* Botão fechar (desabilitado - precisa autenticar) */}
+          {/* Botão X para fechar */}
+          <button
+            onClick={handleClose}
+            className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full p-1"
+            aria-label="Fechar e voltar à listagem"
+            type="button"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          {/* Ícone de cadeado */}
           <div className="flex items-center justify-center mb-4">
             <div className="bg-blue-100 rounded-full p-3">
               <Lock className="w-6 h-6 text-blue-600" />
