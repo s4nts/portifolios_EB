@@ -6,7 +6,9 @@ import BackButton from "./BackButton";
 import LogoImage from "./LogoImage";
 import AuthModal from "./AuthModal";
 import ExportPDFButton from "./ExportPDFButton";
-import { isAuthenticated } from "@/lib/auth";
+import ScrollToTopButton from "./ScrollToTopButton";
+import ShareButton from "./ShareButton";
+import { isAuthenticated, isAdminAuthenticated } from "@/lib/auth";
 import { withBasePath } from "@/lib/getBasePath";
 
 interface Section {
@@ -39,12 +41,23 @@ export default function ArticleLayout({
   useEffect(() => {
     // Verifica autenticação ao montar o componente
     const checkAuth = () => {
-      const authenticated = isAuthenticated(slug);
+      // Se é admin, está autorizado automaticamente
+      const adminAuth = isAdminAuthenticated();
+      // Se não é admin, verifica autenticação específica do portfólio
+      const portfolioAuth = isAuthenticated(slug);
+      const authenticated = adminAuth || portfolioAuth;
       setIsAuthorized(authenticated);
       setIsAuthModalOpen(!authenticated);
     };
 
     checkAuth();
+
+    // Revalida quando a URL mudar (para detectar token de compartilhamento)
+    const handleLocationChange = () => {
+      checkAuth();
+    };
+    window.addEventListener("popstate", handleLocationChange);
+    return () => window.removeEventListener("popstate", handleLocationChange);
   }, [slug]);
 
   const handleAuthSuccess = () => {
@@ -227,6 +240,9 @@ export default function ArticleLayout({
         slug={slug}
         onSuccess={handleAuthSuccess}
       />
+
+      <ScrollToTopButton />
+      <ShareButton />
     </div>
   );
 }

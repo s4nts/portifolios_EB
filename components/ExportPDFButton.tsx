@@ -38,6 +38,74 @@ export default function ExportPDFButton({
     });
   };
 
+  /**
+   * Justifica um texto ajustando o espaçamento entre palavras
+   */
+  const justifyText = (
+    pdf: jsPDF,
+    text: string,
+    x: number,
+    y: number,
+    maxWidth: number
+  ): number => {
+    // Remove quebras de linha e normaliza espaços
+    const cleanText = text.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
+    const words = cleanText.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const testLine = currentLine ? `${currentLine} ${word}` : word;
+      const testWidth = pdf.getTextWidth(testLine);
+
+      if (testWidth > maxWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+
+    let currentY = y;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const lineWidth = pdf.getTextWidth(line);
+
+      // Se não é a última linha e a linha tem mais de uma palavra, justifica
+      if (i < lines.length - 1 && line.trim().length > 0) {
+        const wordsInLine = line.split(" ").filter((w) => w.length > 0);
+        if (wordsInLine.length > 1) {
+          const totalWordsWidth = wordsInLine.reduce(
+            (sum, word) => sum + pdf.getTextWidth(word),
+            0
+          );
+          const totalSpaces = wordsInLine.length - 1;
+          const spaceWidth =
+            totalSpaces > 0 ? (maxWidth - totalWordsWidth) / totalSpaces : 0;
+          let currentX = x;
+          for (let j = 0; j < wordsInLine.length; j++) {
+            pdf.text(wordsInLine[j], currentX, currentY);
+            if (j < wordsInLine.length - 1) {
+              currentX += pdf.getTextWidth(wordsInLine[j]) + spaceWidth;
+            }
+          }
+        } else {
+          pdf.text(line, x, currentY);
+        }
+      } else {
+        // Última linha: alinha à esquerda
+        pdf.text(line, x, currentY);
+      }
+      currentY += 7;
+    }
+
+    return currentY;
+  };
+
   const exportToPDF = async () => {
     setIsExporting(true);
     try {
@@ -148,20 +216,27 @@ export default function ExportPDFButton({
       );
       yPosition += 20;
 
-      // Texto do objetivo
+      // Texto do objetivo - Justificado
       pdf.setFontSize(12);
       pdf.setFont("helvetica", "normal");
       const objectiveText =
         "Este portfólio tem como objetivo registrar e valorizar o processo de aprendizagem e desenvolvimento das crianças, em alinhamento com a Base Nacional Comum Curricular (BNCC). Por meio da documentação das vivências cotidianas, interações, brincadeiras, explorações e descobertas, buscamos evidenciar como cada criança constrói saberes de forma progressiva, respeitando seu tempo, seus interesses e sua singularidade.\n\nO portfólio também fortalece a parceria entre escola e família, permitindo que os responsáveis acompanhem de perto as conquistas, avanços e experiências significativas vivenciadas pelas crianças. Assim, constitui-se como um instrumento pedagógico que celebra a infância, reconhece suas múltiplas linguagens e dá visibilidade ao desenvolvimento integral dos pequenos.";
 
-      const objectiveLines = pdf.splitTextToSize(objectiveText, contentWidth);
-      for (let lineIndex = 0; lineIndex < objectiveLines.length; lineIndex++) {
+      // Divide por parágrafos
+      const paragraphs = objectiveText.split("\n\n");
+      for (const paragraph of paragraphs) {
         if (yPosition > pageHeight - 30) {
           pdf.addPage();
           yPosition = margin;
         }
-        pdf.text(objectiveLines[lineIndex], margin, yPosition);
-        yPosition += 6;
+        yPosition = justifyText(
+          pdf,
+          paragraph,
+          margin,
+          yPosition,
+          contentWidth
+        );
+        yPosition += 4; // Espaço entre parágrafos
       }
 
       // ========== PRÓXIMAS PÁGINAS: Uma atividade por página ==========
@@ -262,13 +337,14 @@ export default function ExportPDFButton({
             ? section.body
             : `OBJETIVO: ${section.body}`;
 
-          const bodyLines = pdf.splitTextToSize(bodyText, contentWidth);
-
-          // Adiciona o texto do objetivo com espaçamento adequado
-          for (let lineIndex = 0; lineIndex < bodyLines.length; lineIndex++) {
-            pdf.text(bodyLines[lineIndex], margin, yPosition);
-            yPosition += 7;
-          }
+          // Adiciona o texto do objetivo justificado
+          yPosition = justifyText(
+            pdf,
+            bodyText,
+            margin,
+            yPosition,
+            contentWidth
+          );
         }
       }
 
@@ -284,21 +360,45 @@ export default function ExportPDFButton({
       pdf.text(farewellTitle, (pageWidth - farewellTitleWidth) / 2, yPosition);
       yPosition += 20;
 
-      // Texto da despedida
+      // Texto da despedida - Justificado
       pdf.setFontSize(12);
       pdf.setFont("helvetica", "normal");
       const farewellText =
-        "Encerramos este portfólio com o coração cheio de gratidão e orgulho. Ao longo deste percurso, vivenciamos juntos um início repleto de descobertas, um meio marcado por aprendizados, desafios e conquistas, e um fim que celebra o crescimento de cada criança. Cada página aqui registrada traz um pedacinho da trajetória construída com carinho, esforço e dedicação. Em cada traço, sorriso, tentativa e superação, vemos o brilho do desenvolvimento infantil acontecendo de forma única e especial. Levaremos no coração cada momento vivido com vocês, cada conquista celebrada e cada gesto de afeto compartilhado. Na Educação Infantil, ensinamos, mas também aprendemos: aprendemos a olhar o mundo com mais leveza, imaginação e verdade, exatamente como as crianças nos mostram todos os dias. Que este portfólio simbolize o quanto crescemos juntos. Que as sementes plantadas aqui floresçam em sucesso, coragem, organização, autonomia e novos sonhos. A todas as crianças, desejamos boa sorte em seus novos caminhos. Continuem curiosas, sensíveis e cheias de vontade de explorar o mundo. Que cada passo seja cheio de luz, descobertas e alegria.\n\nlevem um pedacinho de nós com vocês, assim como cada um de vocês ficará guardado em nosso coração.\n\nCom gratidão e carinho,\n\nPROFª JOSY ALMEIDA\n\nAGENTES: SUZANA E ALESSANDRA";
+        "Encerramos este portfólio com o coração cheio de gratidão e orgulho. Ao longo deste percurso, vivenciamos juntos um início repleto de descobertas, um meio marcado por aprendizados, desafios e conquistas, e um fim que celebra o crescimento de cada criança. Cada página aqui registrada traz um pedacinho da trajetória construída com carinho, esforço e dedicação. Em cada traço, sorriso, tentativa e superação, vemos o brilho do desenvolvimento infantil acontecendo de forma única e especial. Levaremos no coração cada momento vivido com vocês, cada conquista celebrada e cada gesto de afeto compartilhado. Na Educação Infantil, ensinamos, mas também aprendemos: aprendemos a olhar o mundo com mais leveza, imaginação e verdade, exatamente como as crianças nos mostram todos os dias. Que este portfólio simbolize o quanto crescemos juntos. Que as sementes plantadas aqui floresçam em sucesso, coragem, organização, autonomia e novos sonhos. A todas as crianças, desejamos boa sorte em seus novos caminhos. Continuem curiosas, sensíveis e cheias de vontade de explorar o mundo. Que cada passo seja cheio de luz, descobertas e alegria.";
 
-      const farewellLines = pdf.splitTextToSize(farewellText, contentWidth);
-      for (let lineIndex = 0; lineIndex < farewellLines.length; lineIndex++) {
+      // Divide por parágrafos
+      const farewellParagraphs = farewellText.split("\n\n");
+      for (const paragraph of farewellParagraphs) {
         if (yPosition > pageHeight - 30) {
           pdf.addPage();
           yPosition = margin;
         }
-        pdf.text(farewellLines[lineIndex], margin, yPosition);
-        yPosition += 6;
+        yPosition = justifyText(
+          pdf,
+          paragraph,
+          margin,
+          yPosition,
+          contentWidth
+        );
+        yPosition += 4; // Espaço entre parágrafos
       }
+
+      // Texto final (justificado)
+      yPosition += 4;
+      pdf.setFont("helvetica", "normal");
+      const finalText =
+        "levem um pedacinho de nós com vocês, assim como cada um de vocês ficará guardado em nosso coração.";
+      yPosition = justifyText(pdf, finalText, margin, yPosition, contentWidth);
+      yPosition += 10;
+
+      pdf.text("Com gratidão e carinho,", margin, yPosition);
+      yPosition += 8;
+
+      pdf.setFont("helvetica", "bold");
+      pdf.text("PROFª JOSY ALMEIDA", margin, yPosition);
+      yPosition += 8;
+
+      pdf.text("AGENTES: SUZANA E ALESSANDRA", margin, yPosition);
 
       // Salva o PDF
       const fileName = `${studentName || "artigo"}_${title.replace(

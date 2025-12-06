@@ -133,7 +133,7 @@ export default function ArticleSection({
 
         {/* 3. Objetivo */}
         {safeBody && (
-          <p className="text-base text-slate-700 leading-relaxed">
+          <p className="text-base text-slate-700 leading-relaxed text-justify">
             {safeBody.startsWith("OBJETIVO:") ? (
               <>
                 <span className="font-bold">OBJETIVO:</span>

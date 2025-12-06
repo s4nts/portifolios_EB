@@ -1,39 +1,24 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import { Lock, X, MessageCircle } from "lucide-react";
-import {
-  isValidPassword,
-  setAuthenticated,
-  isAdminPassword,
-  setAdminAuthenticated,
-} from "@/lib/auth";
+import { Lock, X } from "lucide-react";
+import { isAdminPassword, setAdminAuthenticated } from "@/lib/auth";
 
-interface AuthModalProps {
+interface AdminAuthModalProps {
   isOpen: boolean;
-  studentName: string;
-  slug: string;
   onSuccess: () => void;
 }
 
 /**
- * Modal de autenticação para proteger os artigos
+ * Modal de autenticação para a página inicial (apenas senha admin)
  */
-export default function AuthModal({
+export default function AdminAuthModal({
   isOpen,
-  studentName,
-  slug,
   onSuccess,
-}: AuthModalProps) {
-  const router = useRouter();
+}: AdminAuthModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleClose = () => {
-    router.push("/");
-  };
 
   useEffect(() => {
     if (isOpen) {
@@ -51,18 +36,14 @@ export default function AuthModal({
     // Simula um pequeno delay para melhor UX
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    if (isValidPassword(password, studentName)) {
-      // Se é senha admin, salva sessão admin
-      if (isAdminPassword(password)) {
-        setAdminAuthenticated();
-      } else {
-        // Senha do portfólio específico
-        setAuthenticated(slug);
-      }
+    if (isAdminPassword(password)) {
+      setAdminAuthenticated();
       setPassword("");
       onSuccess();
     } else {
-      setError("Senha incorreta. Tente novamente.");
+      setError(
+        "Senha incorreta. Apenas a senha de administrador é aceita aqui."
+      );
     }
 
     setIsLoading(false);
@@ -78,16 +59,6 @@ export default function AuthModal({
       <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4">
         {/* Modal */}
         <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-200">
-          {/* Botão X para fechar */}
-          <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full p-1"
-            aria-label="Fechar e voltar à listagem"
-            type="button"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
           {/* Ícone de cadeado */}
           <div className="flex items-center justify-center mb-4">
             <div className="bg-blue-100 rounded-full p-3">
@@ -96,31 +67,31 @@ export default function AuthModal({
           </div>
 
           <h2 className="text-2xl font-bold text-slate-800 text-center mb-2">
-            Acesso Protegido
+            Acesso Administrativo
           </h2>
 
           <p className="text-sm text-slate-600 text-center mb-6">
-            Por questões de segurança e privacidade, este portifólio está
-            protegido. Por favor, insira a senha para visualizar o conteúdo.
+            Esta área é restrita. Por favor, insira a senha de administrador
+            para acessar a listagem de portfólios.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
-                htmlFor="password"
+                htmlFor="admin-password"
                 className="block text-sm font-medium text-slate-700 mb-2"
               >
-                Senha
+                Senha de Administrador
               </label>
               <input
-                id="password"
+                id="admin-password"
                 type="password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setError("");
                 }}
-                placeholder="Digite a senha"
+                placeholder="Digite a senha de administrador"
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 autoFocus
                 disabled={isLoading}
@@ -133,28 +104,9 @@ export default function AuthModal({
               disabled={isLoading || !password.trim()}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Verificando..." : "Desbloquear"}
+              {isLoading ? "Verificando..." : "Acessar"}
             </button>
           </form>
-
-          <div className="mt-4 pt-4 border-t border-slate-200">
-            <a
-              href="https://wa.me/5547997302855"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 text-sm text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>Esqueci a senha</span>
-            </a>
-            <p className="mt-2 text-xs text-slate-500 text-center">
-              Entre em contato com a professora responsável
-            </p>
-          </div>
-
-          <p className="mt-4 text-xs text-slate-500 text-center">
-            Portifólio de {studentName}
-          </p>
         </div>
       </div>
     </>
