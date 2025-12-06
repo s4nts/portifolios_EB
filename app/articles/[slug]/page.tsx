@@ -66,6 +66,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       title={article.title}
       studentName={article.studentName}
       slug={article.slug}
+      sections={article.sections}
     >
       <ArticleContent sections={article.sections} slug={article.slug} />
     </ArticleLayout>

@@ -72,7 +72,7 @@ export default function ArticleSection({
         {safeHeading && (
           <h2
             id={`section-${safeHeading.slice(0, 10)}`}
-            className="text-2xl font-semibold text-slate-800 mb-6"
+            className="text-2xl font-semibold text-slate-800 mb-6 text-center"
           >
             {safeHeading}
           </h2>
@@ -96,7 +96,9 @@ export default function ArticleSection({
               >
                 <div
                   className={`relative w-full ${
-                    imagePaths.length > 1 ? "h-[450px]" : "md:w-[600px] h-[450px]"
+                    imagePaths.length > 1
+                      ? "h-[450px]"
+                      : "md:w-[600px] h-[450px]"
                   } overflow-hidden`}
                 >
                   <Image
