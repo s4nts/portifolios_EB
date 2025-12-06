@@ -33,8 +33,12 @@ export default function ExportPDFButton({
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = withBasePath(src);
+      img.onerror = (error) => {
+        console.error("Erro ao carregar imagem:", src, error);
+        reject(error);
+      };
+      // Se src já é uma URL completa, usa diretamente; caso contrário, aplica basePath
+      img.src = src.startsWith("http") ? src : withBasePath(src);
     });
   };
 
@@ -133,9 +137,21 @@ export default function ExportPDFButton({
 
       // Banner - de ponta a ponta (sem margens)
       try {
-        const bannerImg = await loadImage(
-          withBasePath("/images/banner/arcoiris.jpeg")
+        // Constrói a URL completa da imagem do banner
+        const bannerPath = withBasePath("/images/banner/arcoiris.jpeg");
+        const bannerUrl = bannerPath.startsWith("http")
+          ? bannerPath
+          : `${window.location.origin}${bannerPath}`;
+
+        console.log("Carregando banner de:", bannerUrl);
+        const bannerImg = await loadImage(bannerUrl);
+        console.log(
+          "Banner carregado:",
+          bannerImg.width,
+          "x",
+          bannerImg.height
         );
+
         const bannerAspectRatio = bannerImg.width / bannerImg.height;
         const bannerWidth = pageWidth; // Largura total da página (210mm para A4)
         const bannerHeight = bannerWidth / bannerAspectRatio;
@@ -151,6 +167,7 @@ export default function ExportPDFButton({
         yPosition += bannerHeight + 10;
       } catch (error) {
         console.error("Erro ao carregar banner:", error);
+        // Continua mesmo se o banner falhar
       }
 
       // Cabeçalho com informações da escola - Apenas labels em bold
