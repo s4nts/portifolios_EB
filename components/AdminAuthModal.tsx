@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { Lock, X } from "lucide-react";
+import { Lock } from "lucide-react";
 import { isAdminPassword, setAdminAuthenticated } from "@/lib/auth";
 
 interface AdminAuthModalProps {
