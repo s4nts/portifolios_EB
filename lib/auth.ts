@@ -73,6 +73,7 @@ export function setAuthenticated(slug: string): void {
 
 /**
  * Verifica se há um token de compartilhamento válido na URL
+ * pathname deve ser o pathname do Next.js (sem basePath)
  */
 export function hasValidShareToken(pathname: string): boolean {
   if (typeof window === "undefined") {
@@ -87,25 +88,26 @@ export function hasValidShareToken(pathname: string): boolean {
   }
 
   // Gera o token esperado baseado no pathname e data atual (válido por 24h)
-  const expectedToken = btoa(
-    `${pathname}-${Math.floor(Date.now() / (1000 * 60 * 60 * 24))}`
-  ).replace(/[+/=]/g, "");
+  // Aceita tokens do dia atual e do dia anterior
+  const today = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+  const yesterday = today - 1;
 
-  // Verifica se o token corresponde
-  // Também aceita tokens do dia anterior (para links compartilhados no mesmo dia)
-  const previousDayToken = btoa(
-    `${pathname}-${Math.floor(
-      (Date.now() - 24 * 60 * 60 * 1000) / (1000 * 60 * 60 * 24)
-    )}`
-  ).replace(/[+/=]/g, "");
+  const expectedTokenToday = btoa(`${pathname}-${today}`).replace(/[+/=]/g, "");
+  const expectedTokenYesterday = btoa(`${pathname}-${yesterday}`).replace(
+    /[+/=]/g,
+    ""
+  );
 
-  return shareToken === expectedToken || shareToken === previousDayToken;
+  return (
+    shareToken === expectedTokenToday || shareToken === expectedTokenYesterday
+  );
 }
 
 /**
  * Verifica se o usuário está autenticado para um artigo
+ * pathname deve ser o pathname do Next.js (sem basePath), ex: "/articles/theo"
  */
-export function isAuthenticated(slug: string): boolean {
+export function isAuthenticated(slug: string, pathname?: string): boolean {
   if (typeof window === "undefined") {
     return false;
   }
@@ -116,7 +118,24 @@ export function isAuthenticated(slug: string): boolean {
   }
 
   // Se tem token de compartilhamento válido, permite acesso
-  if (hasValidShareToken(window.location.pathname)) {
+  // Usa o pathname fornecido (do Next.js) ou tenta extrair do window.location removendo o basePath
+  let pathnameToCheck = pathname;
+  if (!pathnameToCheck) {
+    // Remove o basePath do pathname completo
+    const fullPathname = window.location.pathname;
+    const basePathMatch = fullPathname.match(/^\/([^/]+)/);
+    if (
+      basePathMatch &&
+      basePathMatch[1] !== "articles" &&
+      basePathMatch[1] !== "index.html"
+    ) {
+      // Remove o basePath
+      pathnameToCheck = fullPathname.replace(/^\/[^/]+/, "") || `/${slug}`;
+    } else {
+      pathnameToCheck = fullPathname || `/${slug}`;
+    }
+  }
+  if (hasValidShareToken(pathnameToCheck)) {
     return true;
   }
 

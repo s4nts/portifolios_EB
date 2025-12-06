@@ -3,10 +3,16 @@
 import { useState, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
 
+interface ScrollToTopButtonProps {
+  isAuthModalOpen?: boolean;
+}
+
 /**
  * Botão flutuante para rolar a página para o topo
  */
-export default function ScrollToTopButton() {
+export default function ScrollToTopButton({
+  isAuthModalOpen = false,
+}: ScrollToTopButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -33,7 +39,8 @@ export default function ScrollToTopButton() {
     });
   };
 
-  if (!isVisible) {
+  // Não exibe se o modal de autenticação estiver aberto ou se não estiver visível
+  if (!isVisible || isAuthModalOpen) {
     return null;
   }
 

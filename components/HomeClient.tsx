@@ -67,7 +67,7 @@ export default function HomeClient({ articles }: HomeClientProps) {
 
       <AdminAuthModal isOpen={isAuthModalOpen} onSuccess={handleAuthSuccess} />
 
-      <ScrollToTopButton />
+      <ScrollToTopButton isAuthModalOpen={isAuthModalOpen} />
     </div>
   );
 }

@@ -5,10 +5,16 @@ import { Share2, Check } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { getBasePath } from "@/lib/getBasePath";
 
+interface ShareButtonProps {
+  isAuthModalOpen?: boolean;
+}
+
 /**
  * Botão flutuante para compartilhar o link da página com bypass de senha
  */
-export default function ShareButton() {
+export default function ShareButton({
+  isAuthModalOpen = false,
+}: ShareButtonProps) {
   const [isCopied, setIsCopied] = useState(false);
   const pathname = usePathname();
 
@@ -58,13 +64,22 @@ export default function ShareButton() {
     }
   };
 
+  // Não exibe se o modal de autenticação estiver aberto
+  if (isAuthModalOpen) {
+    return null;
+  }
+
   return (
     <button
       onClick={handleShare}
-      className="fixed top-6 right-6 z-50 bg-green-600 hover:bg-green-700 text-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+      className="fixed right-6 z-50 bg-green-600 hover:bg-green-700 text-white rounded-full p-3 md:top-6 md:bottom-auto shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
       aria-label="Compartilhar link"
       type="button"
       title="Copiar link para compartilhar"
+      style={{
+        top: "auto",
+        bottom: "calc(6rem + 0.5rem)", // Posiciona acima do botão de voltar ao topo no mobile com espaço reduzido
+      }}
     >
       {isCopied ? (
         <Check className="w-6 h-6" />

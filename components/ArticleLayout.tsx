@@ -10,6 +10,7 @@ import ScrollToTopButton from "./ScrollToTopButton";
 import ShareButton from "./ShareButton";
 import { isAuthenticated, isAdminAuthenticated } from "@/lib/auth";
 import { withBasePath } from "@/lib/getBasePath";
+import { usePathname } from "next/navigation";
 
 interface Section {
   heading: string;
@@ -37,6 +38,7 @@ export default function ArticleLayout({
 }: ArticleLayoutProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Verifica autenticação ao montar o componente
@@ -44,21 +46,51 @@ export default function ArticleLayout({
       // Se é admin, está autorizado automaticamente
       const adminAuth = isAdminAuthenticated();
       // Se não é admin, verifica autenticação específica do portfólio
-      const portfolioAuth = isAuthenticated(slug);
+      // Passa o pathname do Next.js (sem basePath) para validação do token
+      // O pathname do Next.js já vem sem o basePath, ex: "/articles/theo"
+      const portfolioAuth = isAuthenticated(slug, pathname);
       const authenticated = adminAuth || portfolioAuth;
       setIsAuthorized(authenticated);
       setIsAuthModalOpen(!authenticated);
     };
 
+    // Verifica imediatamente
     checkAuth();
+
+    // Revalida quando a URL mudar (para detectar token de compartilhamento na primeira carga)
+    // Usa um pequeno delay para garantir que a URL foi completamente carregada
+    const initialCheck = setTimeout(() => {
+      checkAuth();
+    }, 200);
 
     // Revalida quando a URL mudar (para detectar token de compartilhamento)
     const handleLocationChange = () => {
-      checkAuth();
+      // Pequeno delay para garantir que a URL foi atualizada
+      setTimeout(checkAuth, 100);
     };
+
+    // Verifica mudanças na query string periodicamente (apenas nas primeiras verificações)
+    let checkCount = 0;
+    const maxChecks = 5; // Verifica apenas 5 vezes (5 segundos)
+    const checkInterval = setInterval(() => {
+      checkCount++;
+      checkAuth();
+      if (checkCount >= maxChecks) {
+        clearInterval(checkInterval);
+      }
+    }, 1000);
+
     window.addEventListener("popstate", handleLocationChange);
-    return () => window.removeEventListener("popstate", handleLocationChange);
-  }, [slug]);
+    // Também escuta mudanças no hash e search
+    window.addEventListener("hashchange", handleLocationChange);
+
+    return () => {
+      clearTimeout(initialCheck);
+      window.removeEventListener("popstate", handleLocationChange);
+      window.removeEventListener("hashchange", handleLocationChange);
+      clearInterval(checkInterval);
+    };
+  }, [slug, pathname]);
 
   const handleAuthSuccess = () => {
     setIsAuthorized(true);
@@ -241,8 +273,8 @@ export default function ArticleLayout({
         onSuccess={handleAuthSuccess}
       />
 
-      <ScrollToTopButton />
-      <ShareButton />
+      <ScrollToTopButton isAuthModalOpen={isAuthModalOpen} />
+      <ShareButton isAuthModalOpen={isAuthModalOpen} />
     </div>
   );
 }
