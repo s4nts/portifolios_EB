@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Share2, Check } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { getBasePath } from "@/lib/getBasePath";
 
 /**
  * Botão flutuante para compartilhar o link da página com bypass de senha
@@ -13,9 +14,12 @@ export default function ShareButton() {
 
   const handleShare = async () => {
     try {
-      // Usa apenas origin + pathname (sem basePath no caminho)
-      // O pathname do Next.js já não inclui o basePath
-      const currentUrl = `${window.location.origin}${pathname}`;
+      // Obtém o basePath atual
+      const basePath = getBasePath();
+
+      // Constrói a URL completa: origin + basePath + pathname
+      const fullPath = basePath ? `${basePath}${pathname}` : pathname;
+      const currentUrl = `${window.location.origin}${fullPath}`;
 
       // Gera um token simples baseado no pathname e data atual (válido por 24h)
       const token = btoa(
@@ -35,7 +39,9 @@ export default function ShareButton() {
     } catch (error) {
       console.error("Erro ao copiar link:", error);
       // Fallback para navegadores mais antigos
-      const currentUrl = `${window.location.origin}${pathname}`;
+      const basePath = getBasePath();
+      const fullPath = basePath ? `${basePath}${pathname}` : pathname;
+      const currentUrl = `${window.location.origin}${fullPath}`;
       const token = btoa(
         `${pathname}-${Math.floor(Date.now() / (1000 * 60 * 60 * 24))}`
       ).replace(/[+/=]/g, "");
