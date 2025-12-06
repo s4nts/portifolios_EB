@@ -66,7 +66,9 @@ export default function ExportPDFButton({
 
       // Banner - de ponta a ponta (sem margens)
       try {
-        const bannerImg = await loadImage("/images/banner/arcoiris.jpeg");
+        const bannerImg = await loadImage(
+          withBasePath("/images/banner/arcoiris.jpeg")
+        );
         const bannerAspectRatio = bannerImg.width / bannerImg.height;
         const bannerWidth = pageWidth; // Largura total da página (210mm para A4)
         const bannerHeight = bannerWidth / bannerAspectRatio;

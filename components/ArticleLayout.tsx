@@ -54,6 +54,14 @@ export default function ArticleLayout({
 
   const safeTitle = title?.trim() || "Artigo";
   const safeStudentName = studentName?.trim() || "";
+  const [bannerPath, setBannerPath] = useState<string>(
+    "/images/banner/arcoiris.jpeg"
+  );
+
+  useEffect(() => {
+    // Aplica basePath após montagem do componente (no cliente)
+    setBannerPath(withBasePath("/images/banner/arcoiris.jpeg"));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white relative">
@@ -98,7 +106,7 @@ export default function ArticleLayout({
         <div className="relative w-full mb-6 rounded-lg overflow-hidden shadow-md">
           <div className="relative w-full">
             <Image
-              src={withBasePath("/images/banner/arcoiris.jpeg")}
+              src={bannerPath}
               alt="Banner do portifólio"
               width={0}
               height={0}
