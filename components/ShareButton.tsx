@@ -13,13 +13,17 @@ export default function ShareButton() {
 
   const handleShare = async () => {
     try {
+      // Usa apenas origin + pathname (sem basePath no caminho)
+      // O pathname do Next.js já não inclui o basePath
+      const currentUrl = `${window.location.origin}${pathname}`;
+
       // Gera um token simples baseado no pathname e data atual (válido por 24h)
       const token = btoa(
         `${pathname}-${Math.floor(Date.now() / (1000 * 60 * 60 * 24))}`
       ).replace(/[+/=]/g, "");
 
       // Monta a URL completa com o token de compartilhamento
-      const shareUrl = `${window.location.origin}${pathname}?share=${token}`;
+      const shareUrl = `${currentUrl}?share=${token}`;
 
       // Copia para a área de transferência
       await navigator.clipboard.writeText(shareUrl);
@@ -31,11 +35,12 @@ export default function ShareButton() {
     } catch (error) {
       console.error("Erro ao copiar link:", error);
       // Fallback para navegadores mais antigos
+      const currentUrl = `${window.location.origin}${pathname}`;
       const token = btoa(
         `${pathname}-${Math.floor(Date.now() / (1000 * 60 * 60 * 24))}`
       ).replace(/[+/=]/g, "");
       const textArea = document.createElement("textarea");
-      textArea.value = `${window.location.origin}${pathname}?share=${token}`;
+      textArea.value = `${currentUrl}?share=${token}`;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand("copy");
