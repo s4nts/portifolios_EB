@@ -73,7 +73,6 @@ export default function ExportPDFButton({
     let currentY = y;
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const lineWidth = pdf.getTextWidth(line);
 
       // Se não é a última linha e a linha tem mais de uma palavra, justifica
       if (i < lines.length - 1 && line.trim().length > 0) {
