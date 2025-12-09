@@ -221,6 +221,28 @@ export default function ArticleLayout({
           </div>
         </div>
 
+        {/* Imagem Painel de Amigos */}
+        <div className="mb-8">
+          <div className="text-center mb-6">
+            <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 uppercase">
+              Meus Coleguinhas Maternal II 2025
+            </h3>
+          </div>
+          <div className="relative w-full rounded-lg overflow-hidden shadow-md">
+            <div className="relative w-full">
+              <Image
+                src={withBasePath("/images/painel-amigos.png")}
+                alt="Painel de Amigos"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="w-full h-auto"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+
         {children}
 
         {/* Seção de Despedida */}

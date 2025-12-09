@@ -109,9 +109,30 @@ export default function ExportPDFButton({
     return currentY;
   };
 
+  /**
+   * Verifica se uma imagem é válida (não é genérica/modelo)
+   */
+  const isValidImage = (image: string | string[]): boolean => {
+    if (!image) return false;
+    
+    const images = Array.isArray(image) ? image : [image];
+    
+    return images.some((img) => {
+      if (!img || typeof img !== 'string') return false;
+      // Remove imagens genéricas (modelo1-sec*.jpg)
+      if (img.includes('/images/modelo')) return false;
+      // Remove imagens vazias ou inválidas
+      if (img.trim() === '' || img === '/images/logo.png') return false;
+      return true;
+    });
+  };
+
   const exportToPDF = async () => {
     setIsExporting(true);
     try {
+      // Filtra seções que têm imagens válidas (mesma lógica do ArticleContent)
+      const validSections = sections.filter((section) => isValidImage(section.image));
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -255,9 +276,66 @@ export default function ExportPDFButton({
         yPosition += 4; // Espaço entre parágrafos
       }
 
+      // ========== PÁGINA DO PAINEL DE AMIGOS ==========
+      pdf.addPage();
+      yPosition = margin + 20;
+
+      // Título da seção
+      pdf.setFontSize(22);
+      pdf.setFont("helvetica", "bold");
+      const friendsTitle = "Meus Coleguinhas Maternal II 2025";
+      const friendsTitleWidth = pdf.getTextWidth(friendsTitle);
+      pdf.text(
+        friendsTitle,
+        (pageWidth - friendsTitleWidth) / 2,
+        yPosition
+      );
+      yPosition += 20;
+
+      // Carrega e adiciona a imagem do painel de amigos
+      try {
+        const friendsImagePath = withBasePath("/images/painel-amigos.png");
+        const friendsImageUrl = friendsImagePath.startsWith("http")
+          ? friendsImagePath
+          : `${window.location.origin}${friendsImagePath}`;
+
+        console.log("Carregando painel de amigos de:", friendsImageUrl);
+        const friendsImg = await loadImage(friendsImageUrl);
+        console.log(
+          "Painel de amigos carregado:",
+          friendsImg.width,
+          "x",
+          friendsImg.height
+        );
+
+        const friendsAspectRatio = friendsImg.width / friendsImg.height;
+        let friendsWidth = contentWidth;
+        let friendsHeight = friendsWidth / friendsAspectRatio;
+
+        // Se a imagem for muito alta, ajusta para caber na página
+        if (yPosition + friendsHeight > pageHeight - margin) {
+          friendsHeight = pageHeight - margin - yPosition - 10;
+          friendsWidth = friendsHeight * friendsAspectRatio;
+        }
+
+        // Centraliza a imagem
+        const friendsXPos = margin + (contentWidth - friendsWidth) / 2;
+        pdf.addImage(
+          friendsImg,
+          "PNG",
+          friendsXPos,
+          yPosition,
+          friendsWidth,
+          friendsHeight
+        );
+      } catch (error) {
+        console.error("Erro ao carregar painel de amigos:", error);
+        // Continua mesmo se a imagem falhar
+      }
+
       // ========== PRÓXIMAS PÁGINAS: Uma atividade por página ==========
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
+      for (let i = 0; i < validSections.length; i++) {
+        const section = validSections[i];
 
         // Nova página para cada atividade
         pdf.addPage();
