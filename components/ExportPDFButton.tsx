@@ -341,6 +341,72 @@ export default function ExportPDFButton({
         pdf.addPage();
         yPosition = margin;
 
+        // Marca d'água - Logo e nome da escola com transparência
+        try {
+          const logoPath = withBasePath("/images/logo.png");
+          const logoUrl = logoPath.startsWith("http")
+            ? logoPath
+            : `${window.location.origin}${logoPath}`;
+
+          const logoImg = await loadImage(logoUrl);
+          
+          // Cria canvas para aplicar transparência na logo
+          const canvas = document.createElement("canvas");
+          canvas.width = logoImg.width;
+          canvas.height = logoImg.height;
+          const ctx = canvas.getContext("2d");
+          
+          if (ctx) {
+            // Aplica transparência (0.3 = 30% de opacidade)
+            ctx.globalAlpha = 0.3;
+            ctx.drawImage(logoImg, 0, 0);
+            ctx.globalAlpha = 1.0;
+
+            // Tamanho da logo na marca d'água
+            const logoSize = 15; // mm
+            const logoAspectRatio = logoImg.width / logoImg.height;
+            const logoWidth = logoSize;
+            const logoHeight = logoWidth / logoAspectRatio;
+
+            // Centraliza a logo
+            const logoXPos = (pageWidth - logoWidth) / 2;
+            const logoYPos = yPosition;
+
+            // Converte canvas para data URL e adiciona ao PDF
+            const logoDataUrl = canvas.toDataURL("image/png");
+            pdf.addImage(logoDataUrl, "PNG", logoXPos, logoYPos, logoWidth, logoHeight);
+            yPosition += logoHeight + 3;
+          } else {
+            // Fallback se canvas não estiver disponível
+            const logoSize = 15;
+            const logoAspectRatio = logoImg.width / logoImg.height;
+            const logoWidth = logoSize;
+            const logoHeight = logoWidth / logoAspectRatio;
+            const logoXPos = (pageWidth - logoWidth) / 2;
+            const logoYPos = yPosition;
+            pdf.addImage(logoImg, "PNG", logoXPos, logoYPos, logoWidth, logoHeight);
+            yPosition += logoHeight + 3;
+          }
+
+          // Nome da escola com transparência (usando cor mais clara)
+          pdf.setTextColor(150, 150, 150); // Cinza claro para simular transparência
+          pdf.setFontSize(8);
+          pdf.setFont("helvetica", "bold");
+          const schoolName = "CENTRO DE EDUCAÇÃO INFANTIL HERCÍLIO BENTO";
+          const schoolNameWidth = pdf.getTextWidth(schoolName);
+          const schoolNameXPos = (pageWidth - schoolNameWidth) / 2;
+          pdf.text(schoolName, schoolNameXPos, yPosition);
+
+          // Restaura cor normal (preto)
+          pdf.setTextColor(0, 0, 0);
+          
+          yPosition += 15;
+        } catch (error) {
+          console.error("Erro ao carregar logo para marca d'água:", error);
+          // Continua mesmo se a logo falhar
+          yPosition += 20;
+        }
+
         // Nome da atividade - Centralizado e maior
         pdf.setFontSize(20);
         pdf.setFont("helvetica", "bold");

@@ -27,6 +27,7 @@ export default function ArticleSection({
   }, [image]);
 
   const [imagePaths, setImagePaths] = useState<string[]>([]);
+  const [logoPath, setLogoPath] = useState<string>("/images/logo.png");
 
   // Validação básica das props
   const safeHeading = useMemo(() => heading?.trim() || "", [heading]);
@@ -39,6 +40,7 @@ export default function ArticleSection({
       return withBasePath(baseImage);
     });
     setImagePaths(paths);
+    setLogoPath(withBasePath("/images/logo.png"));
   }, [images]);
 
   const handleDownload = async (imagePath: string, alt: string) => {
@@ -65,9 +67,25 @@ export default function ArticleSection({
   return (
     <>
       <section
-        className="mb-12"
+        className="mb-12 relative"
         aria-labelledby={`section-${safeHeading.slice(0, 10)}`}
       >
+        {/* Marca d'água - Logo e nome da escola com transparência */}
+        <div className="flex flex-col items-center justify-center mb-6 opacity-30">
+          <div className="relative w-20 h-20 mb-2">
+            <Image
+              src={logoPath}
+              alt="Logo da escola"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <p className="text-xs md:text-sm font-semibold text-slate-600 uppercase text-center">
+            Centro de Educação Infantil Hercílio Bento
+          </p>
+        </div>
+
         {/* 1. Título */}
         {safeHeading && (
           <h2
