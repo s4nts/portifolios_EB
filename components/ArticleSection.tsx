@@ -81,7 +81,7 @@ export default function ArticleSection({
               priority
             />
           </div>
-          <p className="text-xs md:text-sm font-semibold text-slate-600 uppercase text-center">
+          <p className="text-2xl font-semibold text-slate-600 uppercase text-center">
             Centro de Educação Infantil Hercílio Bento
           </p>
         </div>

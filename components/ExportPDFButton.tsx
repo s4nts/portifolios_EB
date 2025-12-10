@@ -389,8 +389,9 @@ export default function ExportPDFButton({
           }
 
           // Nome da escola com transparência (usando cor mais clara)
+          // Usa o mesmo tamanho da fonte do título da atividade (20)
           pdf.setTextColor(150, 150, 150); // Cinza claro para simular transparência
-          pdf.setFontSize(8);
+          pdf.setFontSize(20);
           pdf.setFont("helvetica", "bold");
           const schoolName = "CENTRO DE EDUCAÇÃO INFANTIL HERCÍLIO BENTO";
           const schoolNameWidth = pdf.getTextWidth(schoolName);

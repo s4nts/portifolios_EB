@@ -6,152 +6,101 @@
     {
       "heading": "MEU 1º DIA DE AULA",
       "body": "OBJETIVO: Favorecer o acolhimento e a adaptação da criança ao ambiente escolar, promovendo interações seguras, afetivas e estimulantes, de modo que se sinta pertencente ao novo espaço e estabeleça vínculos iniciais com colegas, professores e demais profissionais da escola.",
-      "image": "/images/modelo1-sec01.jpg"
-    },
-    {
-      "heading": "PINTURA COLETIVA",
-      "body": "OBJETIVO: Promover experiências artísticas coletivas em espaços externos, estimulando a criatividade, a expressão individual e coletiva, a coordenação motora ampla e a socialização, favorecendo a interação, o respeito às produções dos colegas e a exploração de diferentes suportes, cores e texturas.",
-      "image": "/images/modelo1-sec02.jpg"
+      "image": "/images/Heitor/meu-1-dia-de-aula.png"
     },
     {
       "heading": "EXPLORANDO O PARQUE",
       "body": "OBJETIVO: Possibilitar que as crianças, por meio do brincar no parque, desenvolvam habilidades motoras, sociais, cognitivas e emocionais, explorando o corpo e o ambiente de forma segura, autônoma e prazerosa, fortalecendo vínculos e aprendendo a conviver e respeitar o outro.",
-      "image": "/images/modelo1-sec03.jpg"
+      "image": "/images/Heitor/explorando-o-parque.png"
     },
     {
       "heading": "PINTURA DIRIGIDA",
       "body": "OBJETIVO: Possibilitar que a criança, por meio da pintura, desenvolva a coordenação motora fina, a percepção visual, a criatividade e a expressão de sentimentos e ideias, explorando cores, formas e diferentes modos de representação.",
-      "image": "/images/modelo1-sec04.jpg"
+      "image": "/images/Heitor/pintura-dirigida.png"
     },
     {
       "heading": "HORA DA LEITURA",
       "body": "OBJETIVO: Possibilitar que as crianças, por meio da leitura e do manuseio dos livros, desenvolvam o gosto pela literatura, a imaginação, a ampliação do vocabulário, a escuta atenta e a compreensão de histórias, além de vivenciar práticas de cuidado e respeito com os materiais de leitura.",
-      "image": "/images/modelo1-sec05.jpg"
+      "image": [
+        "/images/Heitor/hora-da-leitura.png",
+        "/images/Heitor/hora-da-leitura-2.png"
+      ]
     },
     {
       "heading": "QUAL MINHA ALTURA?",
       "body": "OBJETIVO: Proporcionar experiências que favoreçam o reconhecimento do próprio corpo e do crescimento individual, explorando comparações e noções de medida e altura entre as crianças, promovendo o autoconhecimento, o respeito às diferenças e o desenvolvimento do pensamento lógico-matemático.",
-      "image": "/images/modelo1-sec06.jpg"
-    },
-    {
-      "heading": "CAÇA AOS ELÁSTICOS COLORIDOS",
-      "body": "OBJETIVO: Desenvolver a coordenação motora fina, atenção e concentração, explorando cores, movimentos e desafios lúdicos, por meio da brincadeira de pescaria com elásticos coloridos, promovendo também a autonomia e o raciocínio lógico.",
-      "image": "/images/modelo1-sec07.jpg"
+      "image": "/images/Heitor/qual-minha-altura.png"
     },
     {
       "heading": "ROTINA QUALIFICADA",
       "body": "OBJETIVO: Promover momentos de convivência, socialização e autonomia, incentivando atitudes de cooperação, respeito, higiene e alimentação saudável, por meio da interação com os colegas durante a hora da refeição.",
-      "image": "/images/modelo1-sec08.jpg"
-    },
-    {
-      "heading": "MÃOS QUE PINTAM O MUNDO",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio do contato e experimentação com tinta guache, desenvolva a coordenação motora fina, a percepção visual, a criatividade e a expressão de sentimentos e ideias, explorando cores, texturas, misturas e diferentes formas de aplicação.",
-      "image": "/images/modelo1-sec09.jpg"
-    },
-    {
-      "heading": "PAREAMENTO COM SOMBRA",
-      "body": "OBJETIVO: Favorecer o desenvolvimento do raciocínio lógico, da atenção e da percepção visual, possibilitando que a criança estabeleça relações de semelhança e diferença entre figuras e suas respectivas sombras, ampliando sua capacidade de observação, comparação, classificação e associação de elementos do cotidiano.",
-      "image": "/images/modelo1-sec10.jpg"
-    },
-    {
-      "heading": "CHUVA DE CORES",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio da ação de borrifar água sobre papel crepom colorido, desenvolva a coordenação motora fina, a percepção visual, a criatividade e a experimentação artística, explorando cores, formas, texturas e os efeitos da mistura de pigmentos na água e no papel.",
-      "image": "/images/modelo1-sec11.jpg"
-    },
-    {
-      "heading": "EXPLORANDO A NATUREZA",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio da exploração da árvore e do ambiente natural, desenvolva a coordenação motora ampla, o equilíbrio, a percepção sensorial, a curiosidade científica e atitudes de cuidado e respeito pela natureza, ampliando a compreensão do mundo ao seu redor.",
-      "image": "/images/modelo1-sec12.jpg"
-    },
-    {
-      "heading": "PINÇA DAS CORES",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio da transferência de tampinhas coloridas com o uso de prendedores, desenvolva a coordenação motora fina, a precisão dos movimentos, a percepção visual, a concentração, a atenção e a discriminação de cores, além de experimentar diferentes formas de manipulação de objetos.",
-      "image": "/images/modelo1-sec13.jpg"
-    },
-    {
-      "heading": "DESAFIO DO PRENDEDOR",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio da atividade de estender roupas com o uso do prendedor, desenvolva a coordenação motora fina, a força e o controle dos movimentos das mãos e dedos, a atenção e a organização, além de vivenciar situações de autonomia e colaboração no cuidado com os objetos e o ambiente.",
-      "image": "/images/modelo1-sec14.jpg"
-    },
-    {
-      "heading": "PÁSCOA",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio de atividades relacionadas à Páscoa, desenvolva a socialização, o respeito às tradições culturais, a expressão de sentimentos, a criatividade e a participação em vivências coletivas, ampliando sua compreensão sobre valores como partilha, amizade e solidariedade.",
-      "image": "/images/modelo1-sec15.jpg"
-    },
-    {
-      "heading": "PIQUENIQUE",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio do piquenique com a participação das famílias, desenvolva habilidades de socialização, respeito, cooperação e partilha, fortalecendo vínculos afetivos e comunitários, além de vivenciar experiências prazerosas em um ambiente ao ar livre que favoreçam o convívio e a integração escola–família.",
-      "image": "/images/modelo1-sec16.jpg"
-    },
-    {
-      "heading": "DIA DAS MÃES",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio de atividades relacionadas ao Dia das Mães, desenvolva a expressão de sentimentos, a valorização dos vínculos afetivos e familiares, o respeito e a gratidão, participando de vivências que estimulem a criatividade, a oralidade e a socialização.",
-      "image": "/images/modelo1-sec17.jpg"
+      "image": [
+        "/images/Heitor/rotina-qualificada.png",
+        "/images/Heitor/rotina-qualificada-2.png"
+      ]
     },
     {
       "heading": "QUAL NÚMERO DO MEU SAPATO?",
       "body": "OBJETIVO: Estimular a autonomia e o cuidado pessoal, possibilitando que a criança reconheça seus pertences, identifique o número do próprio sapato e coopere com os colegas, desenvolvendo atenção, percepção visual, noção de número e atitudes de ajuda e colaboração.",
-      "image": "/images/modelo1-sec18.jpg"
-    },
-    {
-      "heading": "RELEITURA DO BICO DO PAPAGAIO",
-      "body": "OBJETIVO: Possibilitar que a criança, por meio do trabalho com argila e escultura na releitura de obras artísticas, desenvolva a coordenação motora fina, a percepção estética, a criatividade e a imaginação, explorando texturas, formas e volumes, valorizando e reinterpretando produções culturais e artísticas.",
-      "image": "/images/modelo1-sec19.jpg"
+      "image": "/images/Heitor/qual-numero-do-meu-sapato.png"
     },
     {
       "heading": "TEMA JUNINO",
       "body": "OBJETIVO: Possibilitar que a criança, por meio de atividades relacionadas ao tema junino, conheça e valorize manifestações culturais, desenvolva a socialização, a expressão corporal, a criatividade e a oralidade, participando de vivências que integrem música, dança, arte e brincadeiras típicas.",
-      "image": "/images/modelo1-sec20.jpg"
+      "image": "/images/Heitor/tema-junino.png"
     },
     {
       "heading": "AUTORRETRATO",
       "body": "OBJETIVO: Possibilitar que a criança, por meio da produção do autorretrato, reconheça e valorize sua identidade, desenvolva a percepção de si mesma e das suas características físicas, estimule a coordenação motora fina, a criatividade e a expressão artística, utilizando diferentes materiais e técnicas.",
-      "image": "/images/modelo1-sec21.jpg"
+      "image": "/images/Heitor/autorretrato.png"
     },
     {
       "heading": "DIA DOS PAIS",
       "body": "OBJETIVO: Possibilitar que a criança, por meio de vivências relacionadas ao Dia dos Pais, fortaleça vínculos afetivos, valorize as relações familiares, desenvolva a expressão de sentimentos, a criatividade e a socialização, respeitando as diferentes formas de organização familiar.",
-      "image": "/images/modelo1-sec22.jpg"
+      "image": "/images/Heitor/dia-dos-pais.png"
     },
     {
       "heading": "1º LETRA DO MEU NOME",
       "body": "OBJETIVO: Possibilitar que a criança, por meio de atividades que envolvam a primeira letra do seu nome, reconheça e valorize sua identidade, desenvolva a percepção visual e auditiva da letra, ampliando a familiaridade com a escrita e estabelecendo relações entre símbolos gráficos e sons.",
-      "image": "/images/modelo1-sec23.jpg"
+      "image": "/images/Heitor/1-letra-do-meu-nome.png"
     },
     {
       "heading": "MOMENTO CULTURAL",
       "body": "OBJETIVO: Proporcionar experiências que valorizem as expressões culturais, a criatividade e a identidade das crianças, promovendo a socialização e o respeito à diversidade por meio de apresentações artísticas e culturais, estimulando a autoestima, a oralidade e o senso de pertencimento ao grupo.",
-      "image": "/images/modelo1-sec24.jpg"
+      "image": "/images/Heitor/momento-cultural.png"
     },
     {
       "heading": "MOMENTO CÍVICO",
       "body": "OBJETIVO: Promover o sentimento de pertencimento, identidade nacional e respeito aos símbolos cívicos e culturais, valorizando o momento cívico como espaço de formação da cidadania, de escuta, convivência e respeito mútuo.",
-      "image": "/images/modelo1-sec25.jpg"
+      "image": "/images/Heitor/momento-civico.png"
     },
     {
       "heading": "PRIMAVERA - RELEITURA DA OBRA DE VAN GOGH \"OS GIRASSÓIS\"",
       "body": "OBJETIVO: Proporcionar às crianças o contato com diferentes manifestações artísticas, favorecendo a apreciação estética e a criatividade, por meio da releitura de obras de arte. Estimular a observação, a sensibilidade, a expressão e a imaginação, valorizando as produções individuais e coletivas como formas de expressão e identidade.",
-      "image": "/images/modelo1-sec26.jpg"
+      "image": "/images/Heitor/primavera-releitura-van-gogh-girassois.png"
     },
     {
       "heading": "DIA DAS CRIANÇAS",
       "body": "OBJETIVO: Promover momentos de interação, socialização e celebração do universo infantil, valorizando a identidade e a expressão das crianças, fortalecendo vínculos afetivos e o sentimento de pertencimento ao grupo por meio de experiências lúdicas, artísticas e culturais.",
-      "image": "/images/modelo1-sec27.jpg"
+      "image": [
+        "/images/Heitor/dia-das-criancas.png",
+        "/images/Heitor/dia-das-criancas-2.png"
+      ]
     },
     {
       "heading": "AS EMOÇÕES",
       "body": "OBJETIVO: Favorecer o reconhecimento e a expressão das emoções, promovendo o autoconhecimento, a empatia, o respeito e a convivência harmoniosa, por meio de experiências que estimulem a comunicação de sentimentos e o controle emocional nas interações cotidianas.",
-      "image": "/images/modelo1-sec28.jpg"
+      "image": "/images/Heitor/as-emocoes.png"
     },
     {
       "heading": "CONSCIÊNCIA NEGRA",
       "body": "OBJETIVO: Promover o respeito à diversidade étnico-racial, a valorização da cultura afro-brasileira e africana e o combate a preconceitos, por meio de vivências que despertem o orgulho pela própria identidade e pelo pertencimento cultural, incentivando o diálogo, a empatia e a igualdade entre as crianças.",
-      "image": "/images/modelo1-sec29.jpg"
+      "image": "/images/Heitor/consciencia-negra-2.png"
     },
     {
       "heading": "NATAL DE LUZ",
       "body": "OBJETIVO: Proporcionar vivências que promovam a socialização, a empatia e o respeito ao próximo, valorizando as tradições natalinas como manifestações culturais. Estimular a expressão artística, a oralidade e o sentimento de pertencimento, reforçando valores humanos como solidariedade, partilha e amor.",
-      "image": "/images/modelo1-sec30.jpg"
+      "image": "/images/Heitor/natal-de-luz.png"
     }
   ]
 }

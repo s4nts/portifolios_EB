@@ -48,28 +48,62 @@ const headingToFileName = {
   'NATAL DE LUZ': 'natal-de-luz',
 };
 
-// Alunos que têm pastas de imagens próprias
-const students = ['Allana', 'Beatriz', 'Emilly'];
+// Mapeamento de nomes de pastas para slugs dos arquivos JSON
+// Algumas pastas têm espaços ou nomes diferentes dos slugs
+const folderToSlugMap = {
+  'Allana': 'allana',
+  'Beatriz': 'beatriz',
+  'Emilly': 'emilly',
+  'Bernardo': 'bernardo',
+  'Caio': 'caio',
+  'Ezekiel': 'ezekiel',
+  'Heitor': 'heitor',
+  'Isabella': 'isabella',
+  'Juan': 'juan',
+  'Levi': 'levi',
+  'Luiza': 'luiza',
+  'Maria Antonella': 'maria-antonella',
+  'Maria Cecilia': 'maria-cecilia',
+  'Maria Clara': 'maria-clara',
+  'Miguel': 'miguel',
+  'Pedro': 'pedro',
+  'Theo': 'theo',
+};
 
-students.forEach((studentName) => {
-  const studentSlug = studentName.toLowerCase();
-  const imagesDir = path.join(process.cwd(), 'public/images', studentName);
+// Detecta automaticamente todas as pastas de alunos
+const imagesBaseDir = path.join(process.cwd(), 'public/images');
+const allFolders = fs.readdirSync(imagesBaseDir, { withFileTypes: true })
+  .filter(dirent => dirent.isDirectory())
+  .map(dirent => dirent.name)
+  .filter(name => !['banner'].includes(name)); // Exclui pastas que não são de alunos
+
+// Filtra apenas pastas que estão no mapeamento
+const students = allFolders.filter(folder => folderToSlugMap.hasOwnProperty(folder));
+
+console.log(`\n📁 Pastas de alunos encontradas: ${students.length}`);
+students.forEach(folder => {
+  console.log(`   - ${folder} → ${folderToSlugMap[folder]}`);
+});
+
+students.forEach((studentFolder) => {
+  const studentSlug = folderToSlugMap[studentFolder];
+  const imagesDir = path.join(process.cwd(), 'public/images', studentFolder);
   const jsonPath = path.join(process.cwd(), 'content/articles', `${studentSlug}.json`);
 
   if (!fs.existsSync(imagesDir)) {
-    console.log(`⚠️  Pasta de imagens não encontrada para ${studentName}: ${imagesDir}`);
+    console.log(`⚠️  Pasta de imagens não encontrada para ${studentFolder}: ${imagesDir}`);
     return;
   }
 
   if (!fs.existsSync(jsonPath)) {
-    console.log(`⚠️  Arquivo JSON não encontrado para ${studentName}: ${jsonPath}`);
+    console.log(`⚠️  Arquivo JSON não encontrado para ${studentFolder} (slug: ${studentSlug}): ${jsonPath}`);
     return;
   }
 
   const files = fs.readdirSync(imagesDir);
   const studentData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
-  console.log(`\n=== ATUALIZANDO IMAGENS DO ${studentName.toUpperCase()} ===\n`);
+  console.log(`\n=== ATUALIZANDO IMAGENS DO ${studentFolder.toUpperCase()} (${studentSlug}) ===\n`);
 
   const sectionsWithImages = [];
   const sectionsWithoutImages = [];
@@ -110,8 +144,8 @@ students.forEach((studentName) => {
       return a.localeCompare(b);
     });
 
-    // Criar os caminhos das imagens
-    const imagePaths = matchingImages.map((img) => `/images/${studentName}/${img}`);
+    // Criar os caminhos das imagens (usa o nome da pasta original)
+    const imagePaths = matchingImages.map((img) => `/images/${studentFolder}/${img}`);
 
     const newImage = imagePaths.length === 1 ? imagePaths[0] : imagePaths;
     console.log(`✓ ${heading}: ${imagePaths.length} imagem(ns)`);
@@ -135,7 +169,7 @@ students.forEach((studentName) => {
     });
   }
   
-  console.log(`\n✓ ${studentName} atualizado com sucesso! (${sectionsWithImages.length} seções com imagens)`);
+  console.log(`\n✓ ${studentFolder} atualizado com sucesso! (${sectionsWithImages.length} seções com imagens)`);
 });
 
 console.log('\n=== CONCLUÍDO ===');
