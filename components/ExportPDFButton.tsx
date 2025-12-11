@@ -276,6 +276,95 @@ export default function ExportPDFButton({
         yPosition += 4; // Espaço entre parágrafos
       }
 
+      // ========== PÁGINA DAS MINHAS PROFESSORAS ==========
+      pdf.addPage();
+      yPosition = margin + 20;
+
+      // Título da seção
+      pdf.setFontSize(22);
+      pdf.setFont("helvetica", "bold");
+      const teachersTitle = "Minhas Professoras";
+      const teachersTitleWidth = pdf.getTextWidth(teachersTitle);
+      pdf.text(
+        teachersTitle,
+        (pageWidth - teachersTitleWidth) / 2,
+        yPosition
+      );
+      yPosition += 20;
+
+      // Carrega e adiciona as 3 imagens das professoras lado a lado
+      try {
+        const profsImages = [
+          { path: "/images/profs/bg2.png", label: "Ag. Sala: Ale" },
+          { path: "/images/profs/bg1.png", label: "Profª: Josy" },
+          { path: "/images/profs/bg3.png", label: "Ag. Sala: Su" },
+        ];
+
+        // Calcula espaçamento: 3 imagens lado a lado com espaçamento de 2px (aproximadamente 0.7mm)
+        const spacing = 0.7; // mm entre imagens (equivalente a ~2px)
+        const totalSpacing = spacing * 2; // espaçamento entre as 3 imagens
+        const availableWidth = contentWidth - totalSpacing;
+        const imgWidth = availableWidth / 3;
+
+        const loadedProfsImages: Array<{
+          img: HTMLImageElement;
+          width: number;
+          height: number;
+          label: string;
+        }> = [];
+
+        // Carrega todas as imagens
+        for (const prof of profsImages) {
+          const profPath = withBasePath(prof.path);
+          const profUrl = profPath.startsWith("http")
+            ? profPath
+            : `${window.location.origin}${profPath}`;
+
+          const profImg = await loadImage(profUrl);
+          const profAspectRatio = profImg.width / profImg.height;
+          const imgHeight = imgWidth / profAspectRatio;
+
+          loadedProfsImages.push({
+            img: profImg,
+            width: imgWidth,
+            height: imgHeight,
+            label: prof.label,
+          });
+        }
+
+        // Encontra a altura máxima para alinhar todas
+        const maxHeight = Math.max(...loadedProfsImages.map((p) => p.height));
+        const startY = yPosition;
+
+        // Adiciona as imagens lado a lado
+        let currentX = margin;
+        for (let i = 0; i < loadedProfsImages.length; i++) {
+          const { img, width, height, label } = loadedProfsImages[i];
+          
+          // Centraliza verticalmente se a imagem for menor que a máxima
+          const yOffset = (maxHeight - height) / 2;
+          
+          pdf.addImage(img, "PNG", currentX, startY + yOffset, width, height);
+          
+          // Adiciona o texto abaixo da imagem
+          pdf.setFontSize(10);
+          pdf.setFont("helvetica", "bold");
+          pdf.setTextColor(0, 0, 0);
+          const labelWidth = pdf.getTextWidth(label);
+          const labelX = currentX + (width - labelWidth) / 2;
+          pdf.text(label, labelX, startY + maxHeight + 5);
+          
+          // Move para a próxima posição
+          currentX += width + spacing;
+        }
+
+        yPosition += maxHeight + 15; // Espaço para o texto + margem
+      } catch (error) {
+        console.error("Erro ao carregar imagens dos professores:", error);
+        // Continua mesmo se as imagens falharem
+        yPosition += 30;
+      }
+
       // ========== PÁGINA DO PAINEL DE AMIGOS ==========
       pdf.addPage();
       yPosition = margin + 20;
@@ -375,7 +464,7 @@ export default function ExportPDFButton({
             // Converte canvas para data URL e adiciona ao PDF
             const logoDataUrl = canvas.toDataURL("image/png");
             pdf.addImage(logoDataUrl, "PNG", logoXPos, logoYPos, logoWidth, logoHeight);
-            yPosition += logoHeight + 3;
+            yPosition += logoHeight + 8; // Aumenta espaçamento entre logo e texto
           } else {
             // Fallback se canvas não estiver disponível
             const logoSize = 15;
@@ -385,13 +474,13 @@ export default function ExportPDFButton({
             const logoXPos = (pageWidth - logoWidth) / 2;
             const logoYPos = yPosition;
             pdf.addImage(logoImg, "PNG", logoXPos, logoYPos, logoWidth, logoHeight);
-            yPosition += logoHeight + 3;
+            yPosition += logoHeight + 8; // Aumenta espaçamento entre logo e texto
           }
 
           // Nome da escola com transparência (usando cor mais clara)
-          // Usa o mesmo tamanho da fonte do título da atividade (20)
+          // Tamanho menor que o título da atividade
           pdf.setTextColor(150, 150, 150); // Cinza claro para simular transparência
-          pdf.setFontSize(20);
+          pdf.setFontSize(14); // Reduzido de 20 para 14
           pdf.setFont("helvetica", "bold");
           const schoolName = "CENTRO DE EDUCAÇÃO INFANTIL HERCÍLIO BENTO";
           const schoolNameWidth = pdf.getTextWidth(schoolName);
