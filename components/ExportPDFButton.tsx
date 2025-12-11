@@ -292,77 +292,45 @@ export default function ExportPDFButton({
       );
       yPosition += 20;
 
-      // Carrega e adiciona as 3 imagens das professoras lado a lado
+      // Carrega e adiciona a imagem única das professoras
       try {
-        const profsImages = [
-          { path: "/images/profs/bg2.png", label: "Ag. Sala: Ale" },
-          { path: "/images/profs/bg1.png", label: "Profª: Josy" },
-          { path: "/images/profs/bg3.png", label: "Ag. Sala: Su" },
-        ];
+        const profsImagePath = withBasePath("/images/profs/profs.jpeg");
+        const profsImageUrl = profsImagePath.startsWith("http")
+          ? profsImagePath
+          : `${window.location.origin}${profsImagePath}`;
 
-        // Calcula espaçamento: 3 imagens lado a lado com espaçamento de 2px (aproximadamente 0.7mm)
-        const spacing = 0.7; // mm entre imagens (equivalente a ~2px)
-        const totalSpacing = spacing * 2; // espaçamento entre as 3 imagens
-        const availableWidth = contentWidth - totalSpacing;
-        const imgWidth = availableWidth / 3;
+        console.log("Carregando imagem das professoras de:", profsImageUrl);
+        const profsImg = await loadImage(profsImageUrl);
+        console.log(
+          "Imagem das professoras carregada:",
+          profsImg.width,
+          "x",
+          profsImg.height
+        );
 
-        const loadedProfsImages: Array<{
-          img: HTMLImageElement;
-          width: number;
-          height: number;
-          label: string;
-        }> = [];
+        const profsAspectRatio = profsImg.width / profsImg.height;
+        let profsWidth = contentWidth;
+        let profsHeight = profsWidth / profsAspectRatio;
 
-        // Carrega todas as imagens
-        for (const prof of profsImages) {
-          const profPath = withBasePath(prof.path);
-          const profUrl = profPath.startsWith("http")
-            ? profPath
-            : `${window.location.origin}${profPath}`;
-
-          const profImg = await loadImage(profUrl);
-          const profAspectRatio = profImg.width / profImg.height;
-          const imgHeight = imgWidth / profAspectRatio;
-
-          loadedProfsImages.push({
-            img: profImg,
-            width: imgWidth,
-            height: imgHeight,
-            label: prof.label,
-          });
+        // Se a imagem for muito alta, ajusta para caber na página
+        if (yPosition + profsHeight > pageHeight - margin) {
+          profsHeight = pageHeight - margin - yPosition - 10;
+          profsWidth = profsHeight * profsAspectRatio;
         }
 
-        // Encontra a altura máxima para alinhar todas
-        const maxHeight = Math.max(...loadedProfsImages.map((p) => p.height));
-        const startY = yPosition;
-
-        // Adiciona as imagens lado a lado
-        let currentX = margin;
-        for (let i = 0; i < loadedProfsImages.length; i++) {
-          const { img, width, height, label } = loadedProfsImages[i];
-          
-          // Centraliza verticalmente se a imagem for menor que a máxima
-          const yOffset = (maxHeight - height) / 2;
-          
-          pdf.addImage(img, "PNG", currentX, startY + yOffset, width, height);
-          
-          // Adiciona o texto abaixo da imagem
-          pdf.setFontSize(10);
-          pdf.setFont("helvetica", "bold");
-          pdf.setTextColor(0, 0, 0);
-          const labelWidth = pdf.getTextWidth(label);
-          const labelX = currentX + (width - labelWidth) / 2;
-          pdf.text(label, labelX, startY + maxHeight + 5);
-          
-          // Move para a próxima posição
-          currentX += width + spacing;
-        }
-
-        yPosition += maxHeight + 15; // Espaço para o texto + margem
+        // Centraliza a imagem
+        const profsXPos = margin + (contentWidth - profsWidth) / 2;
+        pdf.addImage(
+          profsImg,
+          "JPEG",
+          profsXPos,
+          yPosition,
+          profsWidth,
+          profsHeight
+        );
       } catch (error) {
-        console.error("Erro ao carregar imagens dos professores:", error);
-        // Continua mesmo se as imagens falharem
-        yPosition += 30;
+        console.error("Erro ao carregar imagem das professoras:", error);
+        // Continua mesmo se a imagem falhar
       }
 
       // ========== PÁGINA DO PAINEL DE AMIGOS ==========

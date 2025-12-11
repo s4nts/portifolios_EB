@@ -229,53 +229,17 @@ export default function ArticleLayout({
               Minhas Professoras
             </h3>
           </div>
-          <div className="flex flex-col md:flex-row gap-0.5 md:gap-0.5 justify-center items-start">
-            {/* bg2 - Ag. Sala: Ale */}
-            <div className="flex flex-col items-center flex-1 max-w-[calc(33.33%-0.33px)]">
-              <div className="relative w-full aspect-square mb-2">
-                <Image
-                  src={withBasePath("/images/profs/bg2.png")}
-                  alt="Ag. Sala: Ale"
-                  fill
-                  className="object-cover rounded-lg"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <p className="text-sm md:text-base font-semibold text-slate-700 text-center">
-                Ag. Sala: Ale
-              </p>
-            </div>
-            
-            {/* bg1 - Profª: Josy */}
-            <div className="flex flex-col items-center flex-1 max-w-[calc(33.33%-0.33px)]">
-              <div className="relative w-full aspect-square mb-2">
-                <Image
-                  src={withBasePath("/images/profs/bg1.png")}
-                  alt="Profª: Josy"
-                  fill
-                  className="object-cover rounded-lg"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <p className="text-sm md:text-base font-semibold text-slate-700 text-center">
-                Profª: Josy
-              </p>
-            </div>
-            
-            {/* bg3 - Ag. Sala: Su */}
-            <div className="flex flex-col items-center flex-1 max-w-[calc(33.33%-0.33px)]">
-              <div className="relative w-full aspect-square mb-2">
-                <Image
-                  src={withBasePath("/images/profs/bg3.png")}
-                  alt="Ag. Sala: Su"
-                  fill
-                  className="object-cover rounded-lg"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <p className="text-sm md:text-base font-semibold text-slate-700 text-center">
-                Ag. Sala: Su
-              </p>
+          <div className="relative w-full rounded-lg overflow-hidden shadow-md">
+            <div className="relative w-full">
+              <Image
+                src={withBasePath("/images/profs/profs.jpeg")}
+                alt="Minhas Professoras"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="w-full h-auto"
+                priority
+              />
             </div>
           </div>
         </div>
