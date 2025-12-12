@@ -102,10 +102,48 @@ export default function ArticleLayout({
   const [bannerPath, setBannerPath] = useState<string>(
     "/images/banner/arcoiris.jpeg"
   );
+  const [profsImagePath, setProfsImagePath] = useState<string>(
+    "/images/profs/profs.jpeg"
+  );
+  const [friendsImagePath, setFriendsImagePath] = useState<string>(
+    "/images/painel-amigos.png"
+  );
 
   useEffect(() => {
     // Aplica basePath após montagem do componente (no cliente)
-    setBannerPath(withBasePath("/images/banner/arcoiris.jpeg"));
+    // Reexecuta quando a URL mudar (incluindo query parameters)
+    const updatePaths = () => {
+      const banner = withBasePath("/images/banner/arcoiris.jpeg");
+      const profs = withBasePath("/images/profs/profs.jpeg");
+      const friends = withBasePath("/images/painel-amigos.png");
+      
+      setBannerPath(banner);
+      setProfsImagePath(profs);
+      setFriendsImagePath(friends);
+    };
+    
+    // Executa imediatamente
+    updatePaths();
+    
+    // Reexecuta após um pequeno delay para garantir que window.location está atualizado
+    // Isso é importante quando a página é carregada com query parameters
+    const timeout1 = setTimeout(updatePaths, 100);
+    const timeout2 = setTimeout(updatePaths, 500);
+    
+    // Reexecuta quando a URL mudar (para lidar com query parameters)
+    const handleLocationChange = () => {
+      setTimeout(updatePaths, 100);
+    };
+    
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+    };
   }, []);
 
   return (
@@ -232,7 +270,7 @@ export default function ArticleLayout({
           <div className="relative w-full rounded-lg overflow-hidden shadow-md">
             <div className="relative w-full">
               <Image
-                src={withBasePath("/images/profs/profs.jpeg")}
+                src={profsImagePath}
                 alt="Minhas Professoras"
                 width={0}
                 height={0}
@@ -254,7 +292,7 @@ export default function ArticleLayout({
           <div className="relative w-full rounded-lg overflow-hidden shadow-md">
             <div className="relative w-full">
               <Image
-                src={withBasePath("/images/painel-amigos.png")}
+                src={friendsImagePath}
                 alt="Painel de Amigos"
                 width={0}
                 height={0}
